@@ -20,11 +20,13 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
+import estilo
 from cliente import ClienteAPI, ErrorAPI
 from lote import CAMPOS, preparar_lote
 from mock import ClienteMock
 
 st.set_page_config(page_title="Riesgo FPD · Cashea", page_icon="💳", layout="wide")
+estilo.aplicar()
 
 RAIZ = Path(__file__).resolve().parent
 RUTA_EJEMPLOS = Path(os.getenv("EJEMPLOS_PATH", RAIZ.parent / "datos" / "ejemplos.json"))  # los pasa la persona C
@@ -88,7 +90,7 @@ def obtener_cliente():
 
 
 def barra_lateral() -> str:
-    st.sidebar.title("Riesgo FPD · Cashea")
+    estilo.marca_lateral()
     pagina = st.sidebar.radio("Pantalla", ["Nueva solicitud", "Lote", "Panel de riesgo"])
     mock_por_defecto = os.getenv("MODO_MOCK", "").strip().lower() in ("1", "true", "si", "sí", "yes")
     st.sidebar.toggle("Modo demo (respuestas falsas)", value=mock_por_defecto, key="modo_mock",
@@ -173,18 +175,25 @@ def tarjeta_resultado(res: dict) -> None:
     banda = res["banda"]
     fg, bg = COLORES.get(banda, ("#444", "#eee"))
     accion = ACCIONES.get(res["accion"], res["accion"])
+    prob, umbral = float(res["prob_fpd"]), float(res["umbral"])
+    escala = max(umbral * 2, prob * 1.15)            # la barra va de 0 a "escala"
+    ancho = min(prob / escala, 1) * 100
+    marca = min(umbral / escala, 1) * 100
     st.markdown(
-        f"""<div style="background:{bg};border-left:8px solid {fg};padding:16px 20px;border-radius:8px;color:#1f1f1f">
-        <div style="font-size:14px;color:{fg};font-weight:600;text-transform:uppercase">Riesgo {html.escape(banda)}</div>
-        <div style="font-size:40px;font-weight:700;color:{fg};line-height:1.2">{pct(res['prob_fpd'])}</div>
-        <div style="font-size:16px">Acción sugerida: <b>{html.escape(accion)}</b></div></div>""",
+        f"""<div class="res">
+        <span class="pastilla" style="background:{bg};color:{fg}">Riesgo {html.escape(banda)}</span>
+        <div class="prob" style="color:{fg}">{pct(prob)}</div>
+        <div class="cap">probabilidad de caer en mora en la primera cuota</div>
+        <div class="barra"><span style="width:{ancho:.1f}%;background:{fg}"></span><i style="left:{marca:.1f}%"></i></div>
+        <div class="leyenda"><span>0%</span><span>umbral de alto riesgo: {pct(umbral)}</span></div>
+        <div class="accion">Acción sugerida: <b>{html.escape(accion)}</b></div></div>""",
         unsafe_allow_html=True,
     )
 
 
 def pagina_nueva_solicitud(cliente) -> None:
-    st.header("Nueva solicitud")
-    st.caption("Simula lo que llega del checkout: se cargan los datos crudos de la compra y la API calcula el riesgo.")
+    estilo.encabezado("Paso 1 · Evaluar una compra", "Nueva solicitud",
+                      "Simula lo que llega del checkout: se cargan los datos crudos de la compra y la API calcula el riesgo.")
     aviso_demo()
 
     ejemplos, es_respaldo = cargar_ejemplos()
@@ -263,8 +272,8 @@ def pagina_nueva_solicitud(cliente) -> None:
 
 # ----------------------------------------------------------------------------- pantalla 2
 def pagina_lote(cliente) -> None:
-    st.header("Lote de solicitudes")
-    st.caption("Subí un CSV con una solicitud por fila y la API calcula el riesgo de todas.")
+    estilo.encabezado("Evaluar muchas compras", "Lote de solicitudes",
+                      "Subí un CSV con una solicitud por fila y la API calcula el riesgo de todas.")
     aviso_demo()
 
     ejemplos, _ = cargar_ejemplos()
@@ -308,7 +317,7 @@ def pagina_lote(cliente) -> None:
 
     dist = pd.DataFrame({"banda": ORDEN_BANDAS, "solicitudes": [int(cuenta[b]) for b in ORDEN_BANDAS]})
     dist["porcentaje"] = dist["solicitudes"] / len(tabla)
-    grafico = alt.Chart(dist).mark_bar().encode(
+    grafico = alt.Chart(dist).mark_bar(cornerRadiusTopLeft=8, cornerRadiusTopRight=8, size=90).encode(
         x=alt.X("banda:N", sort=ORDEN_BANDAS, title="Banda de riesgo", axis=alt.Axis(labelAngle=0)),
         y=alt.Y("solicitudes:Q", title="Solicitudes"),
         color=alt.Color("banda:N", legend=None,
@@ -358,8 +367,8 @@ def _subir_umbral(key: str, umbrales: list[float], objetivo: float) -> None:
 
 
 def pagina_panel(cliente) -> None:
-    st.header("Panel de riesgo")
-    st.caption("Para el equipo de negocio: el modelo estima el riesgo; el negocio decide cuánto riesgo asumir.")
+    estilo.encabezado("Para el equipo de negocio", "Panel de riesgo",
+                      "El modelo estima el riesgo; el negocio decide cuánto riesgo asumir.")
     aviso_demo()
 
     flash = st.session_state.pop("flash", None)
