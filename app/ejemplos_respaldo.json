@@ -1,0 +1,15 @@
+[
+  {
+    "nombre": "Ejemplo de prueba (provisorio, hasta que llegue datos/ejemplos.json)",
+    "solicitud_id": "S-0001",
+    "fecha_origen": "2025-03-10",
+    "gmv": 85.0,
+    "anticipo": 34.0,
+    "producto": "SPLIT_3",
+    "score": 120,
+    "tipo_orden": "First order",
+    "ordenes_previas": 0,
+    "comercio_id": "C-1234",
+    "vertical": "Supermercados"
+  }
+]
