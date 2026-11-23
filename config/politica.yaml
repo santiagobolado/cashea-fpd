@@ -4,8 +4,7 @@
 # No editar a mano en producción: usar PUT /politica (queda registrado en logs/cambios_politica.csv).
 version: 1
 umbral: 0.155            # elegido en validación (enero), costo FN:FP = 5:1 (supuesto ilustrativo)
-corte_medio: 0.10        # PENDIENTE: valor provisorio; lo calcula la persona C (percentil 70 en validación)
-corte_medio_pendiente: true
+corte_medio: 0.1001      # percentil 70 de las predicciones de validación (GB, fold 2, enero): el 30% más riesgoso queda en medio/alto
 acciones:
   bajo: aprobar
   medio: ajustar_condiciones
