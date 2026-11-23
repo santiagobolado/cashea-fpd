@@ -1,0 +1,16 @@
+# --- Modelo: TIENEN que coincidir con las versiones del Colab donde se guardó el .joblib ---
+# (versiones del Colab: Python 3.13, sklearn 1.6.1, numpy 2.4.6, pandas 2.2.3)
+scikit-learn==1.6.1
+numpy==2.4.6
+pandas==2.2.3
+joblib==1.5.3
+
+# --- Servicio ---
+fastapi==0.165.0
+uvicorn[standard]==0.54.0
+pydantic==2.14.4
+PyYAML==6.0.4
+
+# --- Tests ---
+pytest==9.2.0
+httpx==0.28.1

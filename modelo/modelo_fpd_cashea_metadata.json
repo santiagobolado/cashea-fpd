@@ -1,0 +1,44 @@
+{
+  "proyecto": "Predicción de FPD en la originación de préstamos BNPL — Cashea",
+  "modelo": "Gradient Boosting",
+  "hiperparametros": {
+    "learning_rate": 0.03,
+    "max_leaf_nodes": 31,
+    "min_samples_leaf": 100
+  },
+  "fecha_entrenamiento": "2026-11-02 14:12",
+  "version_sklearn": "1.6.1",
+  "periodo_entrenamiento": [
+    "2024-11-01",
+    "2025-01-31"
+  ],
+  "target": "fpd = 1 si la primera cuota tuvo más de 3 días de atraso",
+  "variables_entrada": [
+    "log_gmv",
+    "ratio_anticipo",
+    "score",
+    "n_cuotas",
+    "ordenes_previas",
+    "log_frec_comercio",
+    "primera_orden",
+    "score_invalido",
+    "score_bajo",
+    "cerca_de_cobro",
+    "vertical",
+    "dia_semana",
+    "comercio_id"
+  ],
+  "umbral": 0.155,
+  "supuesto_costos": {
+    "costo_FN": 5,
+    "costo_FP": 1
+  },
+  "metricas_test": {
+    "AUC": 0.6758,
+    "Gini": 0.3517,
+    "KS": 0.2518,
+    "PR-AUC": 0.1434,
+    "Brier": 0.0676
+  },
+  "auc_validacion_cv": 0.6673
+}

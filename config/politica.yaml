@@ -1,0 +1,12 @@
+# Política de decisión — la define NEGOCIO, no el modelo.
+# Regla: prob >= umbral -> alto; corte_medio <= prob < umbral -> medio; si no -> bajo.
+# SUBIR el umbral = aprobar más (más riesgo). BAJARLO = más conservador.
+# No editar a mano en producción: usar PUT /politica (queda registrado en logs/cambios_politica.csv).
+version: 1
+umbral: 0.155            # elegido en validación (enero), costo FN:FP = 5:1 (supuesto ilustrativo)
+corte_medio: 0.10        # PENDIENTE: valor provisorio; lo calcula la persona C (percentil 70 en validación)
+corte_medio_pendiente: true
+acciones:
+  bajo: aprobar
+  medio: ajustar_condiciones
+  alto: revision
