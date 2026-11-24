@@ -78,7 +78,7 @@ html, body, [class*="css"], .stApp, button, input, textarea, select {{
 [data-testid="stExpander"] {{ background: #fff; border: 1px solid {BORDE}; border-radius: 12px; margin-top: 1rem; }}
 [data-testid="stFileUploaderDropzone"] {{ background: #fff; border: 1.5px dashed #c7d2fe; border-radius: 14px; }}
 hr {{ border-color: {BORDE}; margin: 2rem 0; }}
-[data-testid="stCaptionContainer"] {{ color: {TINTA_SUAVE}; }}
+[data-testid="stCaptionContainer"] {{ color: #475569; }}
 
 /* ---------- botones ---------- */
 .stButton > button, .stDownloadButton > button, [data-testid="stFormSubmitButton"] > button {{

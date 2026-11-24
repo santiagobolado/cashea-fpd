@@ -231,7 +231,8 @@ def pagina_nueva_solicitud(cliente) -> None:
         c3.text_input("Tipo de orden", value=d["tipo_orden"], key=k("tipo_orden"), help='Por ejemplo "First order"')
         c3.number_input("Órdenes previas del cliente", min_value=0, value=d["ordenes_previas"], step=1, key=k("ordenes_previas"))
         s1, s2 = st.columns([1, 2])
-        s1.number_input("Score del cliente (0 a 1000)", value=d["score"], step=1.0, key=k("score"))
+        s1.number_input("Score del cliente (0 a 1000)", value=d["score"], step=1.0, key=k("score"),
+                        help="Puntaje de Cashea para el cliente, de 0 a 1000. Si el cliente no tiene, tildá la casilla de al lado.")
         s2.checkbox("El cliente no tiene score", value=d["sin_score"], key=k("sin_score"))
         enviar = st.form_submit_button("Calcular riesgo", type="primary")
 
@@ -430,11 +431,17 @@ def pagina_panel(cliente) -> None:
         return f"{(f[campo] - v[campo]) * 100:+.1f} pp vs vigente".replace(".", ",") if cambia else None
 
     m1, m2, m3 = st.columns(3)
-    m1.metric("% de solicitudes con alto riesgo (rechazo)", pct(f["pct_rechazo"]), delta("pct_rechazo"), delta_color="off")
-    m2.metric("% de FPD evitado", pct(f["pct_fpd_evitado"]), delta("pct_fpd_evitado"), delta_color="off")
-    m3.metric("Tasa de FPD entre las aprobadas", pct(f["tasa_fpd_aprobados"]), delta("tasa_fpd_aprobados"), delta_color="off")
+    m1.metric("% de solicitudes con alto riesgo (rechazo)", pct(f["pct_rechazo"]), delta("pct_rechazo"), delta_color="off",
+              help="De todas las solicitudes, el porcentaje que queda marcado como alto riesgo y se manda a revisión.")
+    m2.metric("% de FPD evitado", pct(f["pct_fpd_evitado"]), delta("pct_fpd_evitado"), delta_color="off",
+              help="De todas las compras que no se iban a pagar a tiempo, el porcentaje que logramos frenar.")
+    m3.metric("Tasa de FPD entre las aprobadas", pct(f["tasa_fpd_aprobados"]), delta("tasa_fpd_aprobados"), delta_color="off",
+              help="De las solicitudes que se aprueban, el porcentaje que igual no paga la primera cuota a tiempo.")
 
-    st.caption("Indicadores calculados sobre datos de validación (no de producción).")
+    st.caption("**Rechazo:** porcentaje de solicitudes marcadas como alto riesgo (van a revisión). "
+               "**FPD evitado:** de las compras que no se iban a pagar a tiempo, cuántas frenamos. "
+               "**Tasa de FPD entre las aprobadas:** de las que se aprueban, cuántas igual no pagan. "
+               "Indicadores calculados sobre datos de validación (no de producción).")
     st.markdown("**Matriz de confusión** (compras históricas de validación)")
     matriz = pd.DataFrame(
         [[entero(f["tp"]), entero(f["fn"])], [entero(f["fp"]), entero(f["tn"])]],
