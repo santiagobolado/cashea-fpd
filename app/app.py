@@ -316,13 +316,13 @@ def pagina_lote(cliente) -> None:
         col.caption(f"{pct(cuenta[b] / len(tabla))} del lote")
 
     dist = pd.DataFrame({"banda": ORDEN_BANDAS, "solicitudes": [int(cuenta[b]) for b in ORDEN_BANDAS]})
-    dist["porcentaje"] = dist["solicitudes"] / len(tabla)
+    dist["porcentaje"] = [pct(n / len(tabla)) for n in dist["solicitudes"]]   # texto con coma, para el cartelito
     grafico = alt.Chart(dist).mark_bar(cornerRadiusTopLeft=8, cornerRadiusTopRight=8, size=90).encode(
         x=alt.X("banda:N", sort=ORDEN_BANDAS, title="Banda de riesgo", axis=alt.Axis(labelAngle=0)),
         y=alt.Y("solicitudes:Q", title="Solicitudes"),
         color=alt.Color("banda:N", legend=None,
                         scale=alt.Scale(domain=ORDEN_BANDAS, range=[COLORES[b][0] for b in ORDEN_BANDAS])),
-        tooltip=["banda", "solicitudes", alt.Tooltip("porcentaje:Q", format=".1%")],
+        tooltip=["banda", "solicitudes", "porcentaje"],
     ).properties(height=260)
     st.altair_chart(grafico, width="stretch")
 

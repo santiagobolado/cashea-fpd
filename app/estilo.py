@@ -63,7 +63,8 @@ html, body, [class*="css"], .stApp, button, input, textarea, select {{
     background: #fff; border: 1px solid {BORDE}; border-radius: 14px; padding: 1rem 1.2rem;
     box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
 }}
-[data-testid="stMetricLabel"] p {{ color: {TINTA_SUAVE}; font-size: .85rem; font-weight: 500; }}
+[data-testid="stMetricLabel"] p {{ color: {TINTA_SUAVE}; font-size: .85rem; font-weight: 500; white-space: normal; overflow: visible; text-overflow: clip; }}
+[data-testid="stMetricLabel"] {{ overflow: visible; }}
 [data-testid="stMetricValue"] {{ font-weight: 700; letter-spacing: -.02em; color: {TINTA}; }}
 
 /* ---------- formularios, tablas, avisos ---------- */
@@ -143,7 +144,7 @@ def encabezado(ojo: str, titulo: str, subtitulo: str) -> None:
 
 def marca_lateral() -> None:
     st.sidebar.markdown(
-        '<div class="marca"><div class="logo">F</div><div><div class="t1">Riesgo FPD</div>'
-        '<div class="t2">Cashea · Pago a plazos</div></div></div>',
+        '<div class="marca"><div class="logo">C</div><div><div class="t1">Cashea</div>'
+        '<div class="t2">Riesgo de primer pago (FPD)</div></div></div>',
         unsafe_allow_html=True,
     )
