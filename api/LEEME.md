@@ -2,7 +2,7 @@
 
 ## Estructura
 ```
-src/features.py   solicitud cruda -> variables (ÚNICO punto a adaptar: pegar preparar_solicitud)
+src/features.py   solicitud cruda -> variables (preparar_solicitud del notebook, sin cambios)
 src/modelo.py     carga el .joblib una vez y predice (sin FastAPI)
 src/politica.py   probabilidad -> banda -> acción (sin ML)
 src/registro.py   logs/predicciones.csv y logs/cambios_politica.csv
