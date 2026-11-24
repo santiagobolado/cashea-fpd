@@ -63,6 +63,7 @@ source .venv-app/bin/activate      # Windows: .venv-app\Scripts\activate
 pip install -r app/requirements.txt
 API_URL=http://127.0.0.1:8000 streamlit run app/app.py     # o MODO_MOCK=1 para probar sin API
 ```
+Interfaz desplegada: https://cashea-fpd-kxchpbmmxxfubewbtmhttw.streamlit.app/ (si estuvo inactiva, Streamlit pide un clic para despertarla).
 
 **3. Análisis (notebook)**
 ```bash
