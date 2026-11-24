@@ -1,0 +1,38 @@
+[
+  {
+    "solicitud_id": "15427270",
+    "fecha_origen": "2025-02-09",
+    "gmv": 160.0,
+    "anticipo": 32.0,
+    "producto": "SPLIT_12",
+    "score": 405,
+    "tipo_orden": "Follow up order",
+    "ordenes_previas": 1,
+    "comercio_id": "qyDZM00IeQR8siGlx0IpaA==",
+    "vertical": "Tecnología"
+  },
+  {
+    "solicitud_id": "16515008",
+    "fecha_origen": "2025-02-27",
+    "gmv": 27.42,
+    "anticipo": 16.45,
+    "producto": "SPLIT_1",
+    "score": 456,
+    "tipo_orden": "Follow up order",
+    "ordenes_previas": 0,
+    "comercio_id": "7pHC94OxVCo/XxhxusQtxQ==",
+    "vertical": "Supermercados"
+  },
+  {
+    "solicitud_id": "14940582",
+    "fecha_origen": "2025-02-01",
+    "gmv": 77.09,
+    "anticipo": 46.25,
+    "producto": "SPLIT_1",
+    "score": 468,
+    "tipo_orden": "First order",
+    "ordenes_previas": 0,
+    "comercio_id": "NqfeCmO2UMrSDU8E+DVeWA==",
+    "vertical": "Farmacias"
+  }
+]
