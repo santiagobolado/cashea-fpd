@@ -30,7 +30,7 @@ curl -X PUT  http://127.0.0.1:8000/politica -H "content-type: application/json" 
 ## Errores
 | Código | Cuándo |
 |---|---|
-| 422 | Datos inválidos (monto <= 0, anticipo fuera de 0–1, campo desconocido) o umbral < corte_medio |
+| 422 | Datos inválidos (`gmv` <= 0, `anticipo` < 0 o >= `gmv` — es un monto, no un porcentaje —, `producto` sin formato `SPLIT_n`, campo desconocido) o umbral <= corte_medio |
 | 503 | Modelo no cargado o tabla de sensibilidad todavía no generada |
 | 500 | Error interno (mensaje genérico; el detalle queda en los logs del servidor) |
 
