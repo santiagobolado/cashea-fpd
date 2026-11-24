@@ -40,10 +40,12 @@ El modelo devuelve una probabilidad. Una **política** aparte, configurable, la 
 
 Versiones: **Python 3.13** y **scikit-learn 1.6.1**, las mismas del entorno donde se guardó el modelo (`modelo/modelo_fpd_cashea.joblib`). No se reentrena nada.
 
+La API y la interfaz van en **entornos separados**: usan versiones distintas de pandas y numpy (la API, las del modelo guardado). Si se instalan juntas, se rompe la API.
+
 ```bash
 python3.13 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements.txt    # entorno de la API y del notebook
 ```
 
 **1. API y tests**
@@ -54,8 +56,10 @@ curl -X POST http://127.0.0.1:8000/predecir -H "content-type: application/json" 
 ```
 API desplegada: https://cashea-fpd-api.onrender.com (`/docs`, `/health`). En el plan gratuito de Render la primera respuesta puede tardar 1 o 2 minutos.
 
-**2. Interfaz**
+**2. Interfaz** (en otra terminal, con su propio entorno)
 ```bash
+python3.13 -m venv .venv-app
+source .venv-app/bin/activate      # Windows: .venv-app\Scripts\activate
 pip install -r app/requirements.txt
 API_URL=http://127.0.0.1:8000 streamlit run app/app.py     # o MODO_MOCK=1 para probar sin API
 ```
@@ -87,7 +91,7 @@ Detalle de endpoints, contrato y errores: [`api/LEEME.md`](api/LEEME.md).
 
 **Separación modelo / política.** El modelo solo produce una probabilidad. El umbral y el corte medio viven en `config/politica.yaml`, no en el código del modelo. Cambiar la política no requiere reentrenar ni volver a desplegar el modelo, y cada respuesta de la API informa `version_modelo` y `version_politica`.
 
-**Quién cambia el umbral.** Lo decide el área de negocio/riesgo, no quien mantiene el modelo. El cambio se hace con `PUT /politica` indicando `usuario` y `motivo`, y queda registrado en `logs/cambios_politica.csv`. La API rechaza un umbral menor al corte medio. Para elegirlo, se usa la tabla de sensibilidad (`GET /sensibilidad`), que muestra qué pasa con el rechazo, el FPD evitado y el FPD de los aprobados en cada umbral.
+**Quién cambia el umbral.** Lo decide el área de negocio/riesgo, no quien mantiene el modelo. El cambio se hace con `PUT /politica` indicando `usuario` y `motivo`, y queda registrado en `logs/cambios_politica.csv`. La API rechaza un umbral menor o igual al corte medio. Para elegirlo, se usa la tabla de sensibilidad (`GET /sensibilidad`), que muestra qué pasa con el rechazo, el FPD evitado y el FPD de los aprobados en cada umbral.
 
 **Monitoreo mensual.**
 
@@ -103,3 +107,4 @@ Detalle de endpoints, contrato y errores: [`api/LEEME.md`](api/LEEME.md).
 - El AUC (0,676) es moderado: el modelo ordena mejor que el azar, pero la precision es baja (18%).
 - El costo de un FN vs. un FP (5:1) es un supuesto ilustrativo, no un dato de Cashea.
 - En el plan gratuito de Render el disco se borra al reiniciar: se pierden los logs y los cambios de política. En producción irían a una base de datos.
+- `PUT /politica` no pide autenticación: alcanza para la demo, pero en producción solo podría cambiar el umbral el rol de riesgo (login y permisos por rol).
