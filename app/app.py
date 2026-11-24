@@ -4,7 +4,7 @@ Interfaz Streamlit del riesgo FPD (persona B).
 Correr:  streamlit run app/app.py
 Variables de entorno:
   API_URL    URL base de la API (ej. http://127.0.0.1:8000 o la de Render)
-  MODO_MOCK  "1" para usar respuestas falsas sin API (también hay un interruptor en la barra lateral)
+  MODO_MOCK  "1" para usar respuestas falsas sin API (solo para desarrollo: con esta variable aparece un interruptor en la barra lateral; sin ella, no)
 
 Regla: esta app SIEMPRE habla con la API por HTTP. Nunca carga el modelo.
 """
@@ -93,8 +93,11 @@ def barra_lateral() -> str:
     estilo.marca_lateral()
     pagina = st.sidebar.radio("Pantalla", ["Nueva solicitud", "Lote", "Panel de riesgo"])
     mock_por_defecto = os.getenv("MODO_MOCK", "").strip().lower() in ("1", "true", "si", "sí", "yes")
-    st.sidebar.toggle("Modo demo (respuestas falsas)", value=mock_por_defecto, key="modo_mock",
-                      help="Usa respuestas inventadas con el mismo formato de la API. No se conecta a nada.")
+    if mock_por_defecto:   # el interruptor solo existe si se arranca con MODO_MOCK=1 (desarrollo); en la versión pública no aparece
+        st.sidebar.toggle("Modo demo (respuestas falsas)", value=True, key="modo_mock",
+                          help="Usa respuestas inventadas con el mismo formato de la API. No se conecta a nada.")
+    else:
+        st.session_state["modo_mock"] = False
     st.sidebar.divider()
     if st.session_state.get("modo_mock"):
         st.sidebar.caption("Modo demo: no se usa la API.")

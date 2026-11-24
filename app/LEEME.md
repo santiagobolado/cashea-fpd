@@ -23,7 +23,7 @@ MODO_MOCK=1 streamlit run app/app.py                      # Windows PowerShell: 
 # Con la API real:
 API_URL=http://127.0.0.1:8000 streamlit run app/app.py    # o la URL de Render
 ```
-También hay un interruptor "Modo demo" en la barra lateral.
+El interruptor "Modo demo" de la barra lateral solo aparece si se arranca con MODO_MOCK=1 (desarrollo); en la versión publicada no se muestra, para no mezclar datos inventados con los reales.
 
 ## Qué espera de los demás
 - `datos/ejemplos.json` (Persona C): lista (o `{"ejemplos": [...]}`) de solicitudes con los campos del contrato; opcional `"nombre"` para el botón.
